@@ -10,12 +10,14 @@ public class FlickrPhoto {
     private final String server;
     private final String id;
     private final String secret;
+    private final String title;
 
-    public FlickrPhoto(int farm, String server, String id, String secret) {
+    public FlickrPhoto(int farm, String server, String id, String secret, String title) {
         this.farm = farm;
         this.server = server;
         this.id = id;
         this.secret = secret;
+        this.title = title;
     }
 
     @Nullable
@@ -40,5 +42,9 @@ public class FlickrPhoto {
 
     public String getSecret() {
         return secret;
+    }
+
+    public String getTitle() {
+        return title;
     }
 }

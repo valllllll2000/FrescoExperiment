@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 
@@ -15,11 +16,11 @@ import java.util.List;
 /**
  * Created by valeria on 2/11/15.
  */
-public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
+public class FlickrAdapter extends RecyclerView.Adapter<FlickrAdapter.ViewHolder> {
 
     private final List<FlickrPhoto> urls;
 
-    public MyAdapter(List<FlickrPhoto> myDataset) {
+    public FlickrAdapter(List<FlickrPhoto> myDataset) {
         this.urls = myDataset;
     }
 
@@ -39,6 +40,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
             Log.d("onBindViewHolder", "url : " + url);
             Uri uri = Uri.parse(url);
             holder.imageView.setImageURI(uri);
+            holder.textView.setText(photo.getTitle());
         }
     }
 
@@ -47,12 +49,26 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         return urls == null ? 0 : urls.size();
     }
 
+    public void clear() {
+        if(urls != null){
+            urls.clear();
+            notifyDataSetChanged();
+        }
+    }
+
+    public void addAll(List<FlickrPhoto> photos) {
+        urls.addAll(photos);
+        notifyDataSetChanged();
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
         final SimpleDraweeView imageView;
+        final TextView textView;
 
         public ViewHolder(View v) {
             super(v);
             imageView = (SimpleDraweeView) v.findViewById(R.id.image_view);
+            textView = (TextView) v.findViewById(R.id.tv_title);
         }
     }
 }

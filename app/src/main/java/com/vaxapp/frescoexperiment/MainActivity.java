@@ -1,30 +1,31 @@
 package com.vaxapp.frescoexperiment;
 
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.logging.HttpLoggingInterceptor;
-
-import java.util.List;
+import java.util.ArrayList;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import retrofit.Call;
-import retrofit.Callback;
-import retrofit.GsonConverterFactory;
-import retrofit.Response;
-import retrofit.Retrofit;
+import rx.Observable;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 public class MainActivity extends AppCompatActivity {
 
     @Bind(R.id.recycler_view)
     RecyclerView recyclerView;
+
+    @Bind(R.id.swipe_to_refresh)
+    SwipeRefreshLayout swipeRefreshLayout;
+    private FlickrAdapter flickrAdapter;
+    private FlickerApiService service = new FlickerApiService();
+    Subscriber subscriber;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,42 +33,56 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        Gson gson = new GsonBuilder()
-                .setDateFormat("yyyy-MM-dd'T'HH:mm:ssZ")
-                .create();
+        initUi();
+        loadData();
+    }
 
-        OkHttpClient client = new OkHttpClient();
-        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
-        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-        client.interceptors().add(interceptor);
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://api.flickr.com/")
-                .client(client)
-                .addConverterFactory(GsonConverterFactory.create(gson))
-                .build();
+    private void loadData() {
+        Observable<ApiPhotos> observable = service.loadRepoRx();
 
-        APIService service = retrofit.create(APIService.class);
-        Call<ApiPhotos> call = service.loadRepo();
-        call.enqueue(new Callback<ApiPhotos>() {
+        observable.observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Subscriber<ApiPhotos>() {
+                    @Override
+                    public void onCompleted() {
+                        Log.d("MainActivity", "onCompleted");
+                    }
 
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.e("MainActivity", "onError", e);
+                        swipeRefreshLayout.setRefreshing(false);
+                    }
+
+                    @Override
+                    public void onNext(ApiPhotos response) {
+                        Log.d("MainActivity", "onNext");
+                        swipeRefreshLayout.setRefreshing(false);
+                        flickrAdapter.addAll(response.getApiPhoto().getPhoto());
+                    }
+                });
+    }
+
+    private void initUi() {
+        flickrAdapter = new FlickrAdapter(new ArrayList<FlickrPhoto>());
+        RecyclerView.LayoutManager gridLayoutManager = new GridLayoutManager(this, 2);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(gridLayoutManager);
+        recyclerView.setAdapter(flickrAdapter);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
-            public void onResponse(Response<ApiPhotos> response, Retrofit retrofit) {
-                setUpRecyclerView(response.body().getApiPhoto().getPhoto(), recyclerView);
-            }
-
-            @Override
-            public void onFailure(Throwable t) {
-                Log.e("failure", "api call failed", t);
+            public void onRefresh() {
+                flickrAdapter.clear();
+                loadData();
             }
         });
     }
 
-    private void setUpRecyclerView(List<FlickrPhoto> myDataset, RecyclerView mRecyclerView) {
-        RecyclerView.Adapter mAdapter = new MyAdapter(myDataset);
-        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 2);
-        mRecyclerView.setHasFixedSize(true);
-        mRecyclerView.setLayoutManager(mLayoutManager);
-        mRecyclerView.setAdapter(mAdapter);
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (subscriber != null) {
+            subscriber.unsubscribe();
+        }
     }
-
 }
