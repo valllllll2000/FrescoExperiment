@@ -1,10 +1,7 @@
 package com.vaxapp.frescoexperiment;
 
+import com.vaxapp.frescoexperiment.presentation.FlickrPhoto;
 import java.util.List;
-
-/**
- * Created by valeria on 2/11/15.
- */
 
 public class ApiPhoto {
 

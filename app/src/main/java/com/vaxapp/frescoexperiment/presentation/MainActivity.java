@@ -7,8 +7,6 @@ import android.support.v7.widget.RecyclerView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import com.vaxapp.frescoexperiment.ApiPhotos;
-import com.vaxapp.frescoexperiment.FlickrAdapter;
-import com.vaxapp.frescoexperiment.FlickrPhoto;
 import com.vaxapp.frescoexperiment.R;
 import com.vaxapp.frescoexperiment.injector.component.DaggerPhotoComponent;
 import com.vaxapp.frescoexperiment.injector.component.PhotoComponent;

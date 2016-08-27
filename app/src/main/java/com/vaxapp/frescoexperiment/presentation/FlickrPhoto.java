@@ -1,4 +1,4 @@
-package com.vaxapp.frescoexperiment;
+package com.vaxapp.frescoexperiment.presentation;
 
 import android.support.annotation.Nullable;
 

@@ -12,7 +12,7 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 @PerActivity
-public class MainActivityPresenter {
+public class MainActivityPresenter implements Presenter {
 
     private FlickerApiService service = new FlickerApiService();
 
@@ -62,6 +62,7 @@ public class MainActivityPresenter {
         loadData();
     }
 
+    @Override
     public void destroy() {
         if (apiSubscription != null && !apiSubscription.isUnsubscribed()) {
             apiSubscription.unsubscribe();

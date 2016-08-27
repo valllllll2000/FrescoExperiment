@@ -1,4 +1,4 @@
-package com.vaxapp.frescoexperiment;
+package com.vaxapp.frescoexperiment.presentation;
 
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 
+import com.vaxapp.frescoexperiment.R;
 import java.util.List;
 
 /**
@@ -18,10 +19,10 @@ import java.util.List;
  */
 public class FlickrAdapter extends RecyclerView.Adapter<FlickrAdapter.ViewHolder> {
 
-    private final List<FlickrPhoto> urls;
+    private final List<FlickrPhoto> flickrPhotos;
 
-    public FlickrAdapter(List<FlickrPhoto> myDataset) {
-        this.urls = myDataset;
+    public FlickrAdapter(List<FlickrPhoto> flickrPhotos) {
+        this.flickrPhotos = flickrPhotos;
     }
 
     @Override
@@ -34,7 +35,7 @@ public class FlickrAdapter extends RecyclerView.Adapter<FlickrAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        FlickrPhoto photo = urls.get(position);
+        FlickrPhoto photo = flickrPhotos.get(position);
         String url = photo.getUrl();
         if (!TextUtils.isEmpty(url)) {
             Log.d("onBindViewHolder", "url : " + url);
@@ -46,18 +47,18 @@ public class FlickrAdapter extends RecyclerView.Adapter<FlickrAdapter.ViewHolder
 
     @Override
     public int getItemCount() {
-        return urls == null ? 0 : urls.size();
+        return flickrPhotos == null ? 0 : flickrPhotos.size();
     }
 
     public void clear() {
-        if(urls != null){
-            urls.clear();
+        if(flickrPhotos != null){
+            flickrPhotos.clear();
             notifyDataSetChanged();
         }
     }
 
     public void addAll(List<FlickrPhoto> photos) {
-        urls.addAll(photos);
+        flickrPhotos.addAll(photos);
         notifyDataSetChanged();
     }
 
