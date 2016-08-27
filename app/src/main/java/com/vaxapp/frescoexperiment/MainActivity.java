@@ -5,25 +5,21 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import java.util.ArrayList;
-import rx.Observable;
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements MainActivityView {
 
     @Bind(R.id.recycler_view)
     RecyclerView recyclerView;
 
     @Bind(R.id.swipe_to_refresh)
     SwipeRefreshLayout swipeRefreshLayout;
+
     private FlickrAdapter flickrAdapter;
-    private FlickerApiService service = new FlickerApiService();
-    Subscriber subscriber;
+
+    private MainActivityPresenter presenter = new MainActivityPresenter();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,32 +27,24 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         initUi();
-        loadData();
+        presenter.setView(this);
+        presenter.onViewReady();
     }
 
-    private void loadData() {
-        Observable<ApiPhotos> observable = service.loadRepoRx();
-        observable.observeOn(AndroidSchedulers.mainThread())
-            .subscribeOn(Schedulers.io())
-            .subscribe(new Subscriber<ApiPhotos>() {
-                @Override
-                public void onCompleted() {
-                    Log.d("MainActivity", "onCompleted");
-                }
+    @Override
+    public void showImages(ApiPhotos response) {
+        flickrAdapter.clear();
+        flickrAdapter.addAll(response.getApiPhoto().getPhoto());
+    }
 
-                @Override
-                public void onError(Throwable e) {
-                    Log.e("MainActivity", "onError", e);
-                    swipeRefreshLayout.setRefreshing(false);
-                }
+    @Override
+    public void showRefreshing() {
+        swipeRefreshLayout.setRefreshing(true);
+    }
 
-                @Override
-                public void onNext(ApiPhotos response) {
-                    Log.d("MainActivity", "onNext");
-                    swipeRefreshLayout.setRefreshing(false);
-                    flickrAdapter.addAll(response.getApiPhoto().getPhoto());
-                }
-            });
+    @Override
+    public void hideRefreshing() {
+        swipeRefreshLayout.setRefreshing(false);
     }
 
     private void initUi() {
@@ -68,8 +56,7 @@ public class MainActivity extends AppCompatActivity {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                flickrAdapter.clear();
-                loadData();
+                presenter.onRefreshView();
             }
         });
     }
@@ -77,8 +64,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (subscriber != null) {
-            subscriber.unsubscribe();
-        }
+        presenter.destroy();
     }
 }

@@ -2,9 +2,6 @@ package com.vaxapp.frescoexperiment;
 
 import android.support.annotation.Nullable;
 
-/**
- * Created by valeria on 2/11/15.
- */
 public class FlickrPhoto {
     private final int farm;
     private final String server;
