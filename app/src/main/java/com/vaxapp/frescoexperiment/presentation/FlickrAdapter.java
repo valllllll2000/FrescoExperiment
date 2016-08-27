@@ -8,15 +8,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
 import com.facebook.drawee.view.SimpleDraweeView;
-
+import com.vaxapp.domain.entity.FlickrPhoto;
 import com.vaxapp.frescoexperiment.R;
 import java.util.List;
 
-/**
- * Created by valeria on 2/11/15.
- */
 public class FlickrAdapter extends RecyclerView.Adapter<FlickrAdapter.ViewHolder> {
 
     private final List<FlickrPhoto> flickrPhotos;
@@ -27,8 +23,7 @@ public class FlickrAdapter extends RecyclerView.Adapter<FlickrAdapter.ViewHolder
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.image_view, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.image_view, parent, false);
         ViewHolder vh = new ViewHolder(v);
         return vh;
     }
@@ -51,7 +46,7 @@ public class FlickrAdapter extends RecyclerView.Adapter<FlickrAdapter.ViewHolder
     }
 
     public void clear() {
-        if(flickrPhotos != null){
+        if (flickrPhotos != null) {
             flickrPhotos.clear();
             notifyDataSetChanged();
         }
@@ -63,6 +58,7 @@ public class FlickrAdapter extends RecyclerView.Adapter<FlickrAdapter.ViewHolder
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
+
         final SimpleDraweeView imageView;
         final TextView textView;
 

@@ -6,11 +6,12 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import com.vaxapp.frescoexperiment.ApiPhotos;
+import com.vaxapp.domain.entity.FlickrPhoto;
 import com.vaxapp.frescoexperiment.R;
 import com.vaxapp.frescoexperiment.injector.component.DaggerPhotoComponent;
 import com.vaxapp.frescoexperiment.injector.component.PhotoComponent;
 import java.util.ArrayList;
+import java.util.List;
 import javax.inject.Inject;
 
 public class MainActivity extends BaseActivity implements MainActivityView {
@@ -46,9 +47,9 @@ public class MainActivity extends BaseActivity implements MainActivityView {
     }
 
     @Override
-    public void showImages(ApiPhotos response) {
+    public void showImages(List<FlickrPhoto> photos) {
         flickrAdapter.clear();
-        flickrAdapter.addAll(response.getApiPhoto().getPhoto());
+        flickrAdapter.addAll(photos);
     }
 
     @Override

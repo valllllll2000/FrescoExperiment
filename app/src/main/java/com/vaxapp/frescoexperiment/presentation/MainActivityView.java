@@ -1,6 +1,7 @@
 package com.vaxapp.frescoexperiment.presentation;
 
-import com.vaxapp.frescoexperiment.ApiPhotos;
+import com.vaxapp.domain.entity.FlickrPhoto;
+import java.util.List;
 
 public interface MainActivityView {
 
@@ -8,5 +9,5 @@ public interface MainActivityView {
 
     void showRefreshing();
 
-    void showImages(ApiPhotos response);
+    void showImages(List<FlickrPhoto> response);
 }

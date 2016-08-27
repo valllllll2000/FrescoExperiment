@@ -1,27 +1,24 @@
 package com.vaxapp.frescoexperiment.presentation;
 
 import android.util.Log;
-import com.vaxapp.frescoexperiment.ApiPhotos;
-import com.vaxapp.frescoexperiment.FlickerApiService;
+import com.vaxapp.domain.entity.FlickrPhoto;
+import com.vaxapp.domain.interactor.UseCase;
 import com.vaxapp.frescoexperiment.injector.PerActivity;
+import java.util.List;
 import javax.inject.Inject;
-import rx.Observable;
+import javax.inject.Named;
 import rx.Subscriber;
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
 @PerActivity
 public class MainActivityPresenter implements Presenter {
 
-    private FlickerApiService service = new FlickerApiService();
+    private final UseCase getPhoto;
 
     private MainActivityView view;
 
-    private Subscription apiSubscription;
-
     @Inject
-    public MainActivityPresenter() {
+    public MainActivityPresenter(@Named("getPhotos") UseCase getPhoto) {
+        this.getPhoto = getPhoto;
     }
 
     public void setView(MainActivityView view) {
@@ -34,28 +31,25 @@ public class MainActivityPresenter implements Presenter {
 
     private void loadData() {
         view.showRefreshing();
-        Observable<ApiPhotos> observable = service.loadRepoRx();
-        apiSubscription = observable.observeOn(AndroidSchedulers.mainThread())
-            .subscribeOn(Schedulers.io())
-            .subscribe(new Subscriber<ApiPhotos>() {
-                @Override
-                public void onCompleted() {
-                    Log.d("MainActivity", "onCompleted");
-                }
+        getPhoto.execute(new Subscriber<List<FlickrPhoto>>() {
+            @Override
+            public void onCompleted() {
+                Log.d("MainActivity", "onCompleted");
+            }
 
-                @Override
-                public void onError(Throwable e) {
-                    Log.e("MainActivity", "onError", e);
-                    view.hideRefreshing();
-                }
+            @Override
+            public void onError(Throwable e) {
+                Log.e("MainActivity", "onError", e);
+                view.hideRefreshing();
+            }
 
-                @Override
-                public void onNext(ApiPhotos response) {
-                    Log.d("MainActivity", "onNext");
-                    view.hideRefreshing();
-                    view.showImages(response);
-                }
-            });
+            @Override
+            public void onNext(List<FlickrPhoto> photos) {
+                Log.d("MainActivity", "onNext");
+                view.hideRefreshing();
+                view.showImages(photos);
+            }
+        }, null);
     }
 
     public void onRefreshView() {
@@ -64,8 +58,6 @@ public class MainActivityPresenter implements Presenter {
 
     @Override
     public void destroy() {
-        if (apiSubscription != null && !apiSubscription.isUnsubscribed()) {
-            apiSubscription.unsubscribe();
-        }
+        getPhoto.unsubscribe();
     }
 }

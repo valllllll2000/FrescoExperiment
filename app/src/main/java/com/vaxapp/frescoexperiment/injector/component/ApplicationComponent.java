@@ -3,6 +3,7 @@ package com.vaxapp.frescoexperiment.injector.component;
 import android.content.Context;
 import com.vaxapp.domain.executor.PostExecutionThread;
 import com.vaxapp.domain.executor.ThreadExecutor;
+import com.vaxapp.domain.repository.PhotoRepository;
 import com.vaxapp.frescoexperiment.App;
 import com.vaxapp.frescoexperiment.injector.module.ApplicationModule;
 import com.vaxapp.frescoexperiment.presentation.BaseActivity;
@@ -24,5 +25,7 @@ public interface ApplicationComponent {
     ThreadExecutor getThreadExecutor();
 
     PostExecutionThread getPostExecutionThread();
+
+    PhotoRepository photoRepository();
 
 }

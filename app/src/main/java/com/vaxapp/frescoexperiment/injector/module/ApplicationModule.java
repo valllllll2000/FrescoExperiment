@@ -2,8 +2,10 @@ package com.vaxapp.frescoexperiment.injector.module;
 
 import android.content.Context;
 import com.vaxapp.data.executor.JobExecutor;
+import com.vaxapp.data.repository.PhotoDataRepository;
 import com.vaxapp.domain.executor.PostExecutionThread;
 import com.vaxapp.domain.executor.ThreadExecutor;
+import com.vaxapp.domain.repository.PhotoRepository;
 import com.vaxapp.frescoexperiment.App;
 import com.vaxapp.frescoexperiment.thread.UIThread;
 import dagger.Module;
@@ -36,5 +38,11 @@ public class ApplicationModule {
     @Singleton
     PostExecutionThread providePostExecutionThread(UIThread uiThread) {
         return uiThread;
+    }
+
+    @Provides
+    @Singleton
+    PhotoRepository providePhotoRepository(PhotoDataRepository photoDataRepository) {
+        return photoDataRepository;
     }
 }

@@ -1,10 +1,7 @@
-package com.vaxapp.frescoexperiment;
+package com.vaxapp.data.entity;
 
 import com.google.gson.annotations.SerializedName;
 
-/**
- * Created by valeria on 2/11/15.
- */
 public class ApiPhotos {
 
     @SerializedName("photos")
