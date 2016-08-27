@@ -1,15 +1,21 @@
-package com.vaxapp.frescoexperiment;
+package com.vaxapp.frescoexperiment.presentation;
 
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import com.vaxapp.frescoexperiment.ApiPhotos;
+import com.vaxapp.frescoexperiment.FlickrAdapter;
+import com.vaxapp.frescoexperiment.FlickrPhoto;
+import com.vaxapp.frescoexperiment.R;
+import com.vaxapp.frescoexperiment.injector.component.DaggerPhotoComponent;
+import com.vaxapp.frescoexperiment.injector.component.PhotoComponent;
 import java.util.ArrayList;
+import javax.inject.Inject;
 
-public class MainActivity extends AppCompatActivity implements MainActivityView {
+public class MainActivity extends BaseActivity implements MainActivityView {
 
     @Bind(R.id.recycler_view)
     RecyclerView recyclerView;
@@ -19,7 +25,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
 
     private FlickrAdapter flickrAdapter;
 
-    private MainActivityPresenter presenter = new MainActivityPresenter();
+    @Inject
+    MainActivityPresenter presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,8 +34,17 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         initUi();
+        initializeInjector();
         presenter.setView(this);
         presenter.onViewReady();
+    }
+
+    private void initializeInjector() {
+        PhotoComponent userComponent = DaggerPhotoComponent.builder()
+                                                           .applicationComponent(getApplicationComponent())
+                                                           .activityModule(getActivityModule())
+                                                           .build();
+        userComponent.inject(this);
     }
 
     @Override

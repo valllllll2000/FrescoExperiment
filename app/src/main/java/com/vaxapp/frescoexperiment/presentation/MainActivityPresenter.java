@@ -1,12 +1,17 @@
-package com.vaxapp.frescoexperiment;
+package com.vaxapp.frescoexperiment.presentation;
 
 import android.util.Log;
+import com.vaxapp.frescoexperiment.ApiPhotos;
+import com.vaxapp.frescoexperiment.FlickerApiService;
+import com.vaxapp.frescoexperiment.injector.PerActivity;
+import javax.inject.Inject;
 import rx.Observable;
 import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
+@PerActivity
 public class MainActivityPresenter {
 
     private FlickerApiService service = new FlickerApiService();
@@ -14,6 +19,10 @@ public class MainActivityPresenter {
     private MainActivityView view;
 
     private Subscription apiSubscription;
+
+    @Inject
+    public MainActivityPresenter() {
+    }
 
     public void setView(MainActivityView view) {
         this.view = view;

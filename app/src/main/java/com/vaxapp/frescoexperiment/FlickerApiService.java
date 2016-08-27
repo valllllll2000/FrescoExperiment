@@ -11,9 +11,6 @@ import retrofit.Retrofit;
 import retrofit.RxJavaCallAdapterFactory;
 import rx.Observable;
 
-/**
- * Created by valeria on 8/11/15.
- */
 public class FlickerApiService {
     private final APIService service;
 

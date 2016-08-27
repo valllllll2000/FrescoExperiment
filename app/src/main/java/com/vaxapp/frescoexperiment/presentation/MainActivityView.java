@@ -1,4 +1,6 @@
-package com.vaxapp.frescoexperiment;
+package com.vaxapp.frescoexperiment.presentation;
+
+import com.vaxapp.frescoexperiment.ApiPhotos;
 
 public interface MainActivityView {
 
