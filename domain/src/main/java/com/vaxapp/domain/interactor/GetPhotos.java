@@ -9,6 +9,9 @@ import rx.Observable;
 
 public class GetPhotos extends UseCase {
 
+    public static final int DEFAULT_NUMBER_OF_RESULTS = 50;
+    public static final String NUMBER_OF_RESULTS_KEY = "number_of_results";
+
     private final PhotoRepository photoRepository;
 
     @Inject
@@ -20,6 +23,8 @@ public class GetPhotos extends UseCase {
 
     @Override
     protected <T> Observable buildUseCaseObservable(Map<String, T> parameters) {
-        return photoRepository.getPhotoList();
+        Integer numberOfResults = parameters == null || !parameters.containsKey(NUMBER_OF_RESULTS_KEY) ? DEFAULT_NUMBER_OF_RESULTS
+            : (Integer) parameters.get(NUMBER_OF_RESULTS_KEY);
+        return photoRepository.getPhotoList(numberOfResults);
     }
 }

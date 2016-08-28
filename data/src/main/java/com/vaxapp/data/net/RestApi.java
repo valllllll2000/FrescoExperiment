@@ -10,7 +10,7 @@ public class RestApi {
     public RestApi() {
     }
 
-    public Observable<ApiPhotos> getPhotos() {
-        return RestServiceFactory.createRetrofitService(PhotoAPIService.class).loadPhotos();
+    public Observable<ApiPhotos> getPhotos(int numberOfResults) {
+        return RestServiceFactory.createRetrofitService(PhotoAPIService.class).loadPhotos(numberOfResults);
     }
 }

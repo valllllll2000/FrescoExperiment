@@ -6,5 +6,5 @@ import rx.Observable;
 
 public interface PhotoRepository {
 
-    Observable<List<FlickrPhoto>> getPhotoList();
+    Observable<List<FlickrPhoto>> getPhotoList(int numberOfResults);
 }

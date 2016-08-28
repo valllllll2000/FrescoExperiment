@@ -2,9 +2,12 @@ package com.vaxapp.frescoexperiment.presentation;
 
 import android.util.Log;
 import com.vaxapp.domain.entity.FlickrPhoto;
+import com.vaxapp.domain.interactor.GetPhotos;
 import com.vaxapp.domain.interactor.UseCase;
 import com.vaxapp.frescoexperiment.injector.PerActivity;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.inject.Inject;
 import javax.inject.Named;
 import rx.Subscriber;
@@ -31,6 +34,8 @@ public class MainActivityPresenter implements Presenter {
 
     private void loadData() {
         view.showRefreshing();
+        Map<String, Integer> params = new HashMap<>(1);
+        params.put(GetPhotos.NUMBER_OF_RESULTS_KEY, GetPhotos.DEFAULT_NUMBER_OF_RESULTS);
         getPhoto.execute(new Subscriber<List<FlickrPhoto>>() {
             @Override
             public void onCompleted() {
@@ -49,7 +54,7 @@ public class MainActivityPresenter implements Presenter {
                 view.hideRefreshing();
                 view.showImages(photos);
             }
-        }, null);
+        }, params);
     }
 
     public void onRefreshView() {

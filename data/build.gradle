@@ -29,6 +29,7 @@ dependencies {
   compile 'com.google.dagger:dagger:2.4'
   compile 'com.mobandme:android-transformer:1.2'
   compile 'com.mobandme:android-transformer-compiler:1.2'
+  compile "io.realm:realm-android:0.87.2"
 
   compile project(path: ':domain')
 

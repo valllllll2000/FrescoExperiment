@@ -10,6 +10,7 @@ import com.vaxapp.frescoexperiment.App;
 import com.vaxapp.frescoexperiment.thread.UIThread;
 import dagger.Module;
 import dagger.Provides;
+import io.realm.RealmConfiguration;
 import javax.inject.Singleton;
 
 @Module
@@ -21,7 +22,6 @@ public class ApplicationModule {
         this.application = application;
     }
 
-    // provide dependencies
     @Provides
     @Singleton
     Context provideContext() {
@@ -44,5 +44,11 @@ public class ApplicationModule {
     @Singleton
     PhotoRepository providePhotoRepository(PhotoDataRepository photoDataRepository) {
         return photoDataRepository;
+    }
+
+    @Provides
+    @Singleton
+    RealmConfiguration provideRealmConfiguration(Context context) {
+        return new RealmConfiguration.Builder(context).deleteRealmIfMigrationNeeded().build();
     }
 }
