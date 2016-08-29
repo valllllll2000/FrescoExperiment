@@ -64,7 +64,8 @@ public class MainActivity extends BaseActivity implements MainActivityView {
 
     private void initUi() {
         flickrAdapter = new FlickrAdapter(new ArrayList<FlickrPhoto>());
-        RecyclerView.LayoutManager gridLayoutManager = new GridLayoutManager(this, 2);
+        RecyclerView.LayoutManager gridLayoutManager =
+            new GridLayoutManager(this, getResources().getInteger(R.integer.photo_column_count));
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(gridLayoutManager);
         recyclerView.setAdapter(flickrAdapter);
