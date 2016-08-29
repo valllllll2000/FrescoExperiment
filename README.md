@@ -15,6 +15,7 @@ Caching with Realm
 * Fresco: http://frescolib.org/
 * Retrofit: http://square.github.io/retrofit/
 * Realm: https://realm.io/news/realm-for-android/
+* ButterKnife: http://jakewharton.github.io/butterknife/
 
 ##More info
 If you want to know more about clean architecture watch this video: https://www.youtube.com/watch?v=o_TH-Y78tt4
