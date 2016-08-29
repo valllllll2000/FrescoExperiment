@@ -21,6 +21,7 @@ Caching with Realm
 If you want to know more about clean architecture watch this video: https://www.youtube.com/watch?v=o_TH-Y78tt4
 
 ##Peding issues
-Error handling particularly when no internet
-UI improvement
+* Error handling particularly when no internet
+* UI improvement
+* Add endless scroll to load more pages
 
