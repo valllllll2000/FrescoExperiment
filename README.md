@@ -5,3 +5,5 @@ Loading flickr images using Retrofit and Fresco and displaying them in a Recycle
 Clean architecture 
 
 MVP
+
+Caching with Realm
