@@ -39,7 +39,13 @@ public class RealmPhotoDataSource implements PhotoDataSource {
             public FlickrApiPhoto call(RealmFlickrPhoto realmFlickrPhoto) {
                 return mapper.transform(realmFlickrPhoto);
             }
-        }).toList();
+        }).toList().flatMap(new Func1<List<FlickrApiPhoto>, Observable<List<FlickrApiPhoto>>>() {
+            @Override
+            public Observable<List<FlickrApiPhoto>> call(List<FlickrApiPhoto> apiPhotos) {
+                realm.close();
+                return Observable.just(apiPhotos);
+            }
+        });
     }
 
     @Override
@@ -56,6 +62,7 @@ public class RealmPhotoDataSource implements PhotoDataSource {
                 realm.beginTransaction();
                 realm.copyToRealmOrUpdate(realmFlickrPhotos);
                 realm.commitTransaction();
+                realm.close();
                 cacheDate = System.currentTimeMillis();
                 return Observable.just(true);
             }
