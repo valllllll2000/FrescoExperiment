@@ -11,7 +11,7 @@ MVP
 Caching with Realm
 
 ##Main Libraries and APIs Used
-Flickr: https://www.flickr.com/services/api/
-Fresco: http://frescolib.org/
-Retrofit: http://square.github.io/retrofit/
-Realm: https://realm.io/news/realm-for-android/
+* Flickr: https://www.flickr.com/services/api/
+* Fresco: http://frescolib.org/
+* Retrofit: http://square.github.io/retrofit/
+* Realm: https://realm.io/news/realm-for-android/
